@@ -11,7 +11,7 @@ const Footer: React.FC = () => {
           
           {/* About Section */}
           <div>
-            <img className="h-8 w-auto mb-4" src="https://i.ibb.co/bF9k7t2/logo-white.png" alt="Bridge Logo" />
+            <img className="h-12 w-auto mb-4" src="/logo.png" alt="Bridge Logo" />
             <p className="text-gray-400">Empowering the next generation of skilled professionals in Rwanda through training, mentorship, and career opportunities.</p>
             <div className="flex space-x-4 mt-4">
                 {/* Placeholder social icons */}

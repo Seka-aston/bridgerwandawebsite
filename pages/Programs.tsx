@@ -1,12 +1,37 @@
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import SectionHeader from '../components/ui/SectionHeader';
 import Card from '../components/ui/Card';
-import { PROGRAMS } from '../constants';
 import { ArrowRight } from 'lucide-react';
+import { supabase } from '../lib/supabase';
+import { Program } from '../types';
+import { PROGRAMS } from '../constants';
 
 const Programs: React.FC = () => {
+  const [programs, setPrograms] = useState<Program[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchPrograms = async () => {
+      try {
+        const { data, error } = await supabase.from('programs').select('*');
+        if (error) throw error;
+        
+        // Use Supabase data if available, otherwise fallback to constants
+        setPrograms(data && data.length > 0 ? data : PROGRAMS);
+      } catch (error) {
+        console.error('Error fetching programs:', error);
+        // Fallback on error
+        setPrograms(PROGRAMS);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPrograms();
+  }, []);
+
   return (
     <div>
       <header className="bg-surface py-16">
@@ -22,7 +47,9 @@ const Programs: React.FC = () => {
       <main className="py-20 bg-background">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-2 gap-8">
-            {PROGRAMS.map((program) => (
+            {loading ? (
+              <div className="col-span-full text-center py-10 text-text-main">Loading programs...</div>
+            ) : programs.map((program) => (
               <Card key={program.id} className="flex flex-col group">
                 <div className="p-8 flex-grow">
                   <h3 className="text-2xl font-bold text-text-headings mb-3">{program.title}</h3>

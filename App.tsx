@@ -13,6 +13,8 @@ import SuccessStories from './pages/SuccessStories';
 import Resources from './pages/Resources';
 import Partnerships from './pages/Partnerships';
 import Contact from './pages/Contact';
+import Login from './pages/Login';
+import Signup from './pages/Signup';
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -42,6 +44,8 @@ const App: React.FC = () => {
             <Route path="/resources" element={<Resources />} />
             <Route path="/partnerships" element={<Partnerships />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
           </Routes>
         </main>
         <Footer />

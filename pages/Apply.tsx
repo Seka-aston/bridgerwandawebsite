@@ -8,11 +8,14 @@ import Step3Documents from '../components/application/Step3Documents';
 import Step4Questions from '../components/application/Step4Questions';
 import Step5Review from '../components/application/Step5Review';
 import Button from '../components/ui/Button';
+import { supabase } from '../lib/supabase';
 
 const TOTAL_STEPS = 5;
 
 const Apply: React.FC = () => {
   const [currentStep, setCurrentStep] = useState(1);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [applicationData, setApplicationData] = useState<ApplicationData>({
     programId: '',
     firstName: '',
@@ -40,11 +43,77 @@ const Apply: React.FC = () => {
   const nextStep = () => setCurrentStep(prev => (prev < TOTAL_STEPS ? prev + 1 : prev));
   const prevStep = () => setCurrentStep(prev => (prev > 1 ? prev - 1 : prev));
   
-  const handleSubmit = () => {
-    console.log('Submitting application:', applicationData);
-    // In a real app, this would be an API call.
-    // We'll just move to a "success" state.
-    setCurrentStep(TOTAL_STEPS + 1);
+  const uploadFile = async (file: File, bucket: string, path: string) => {
+    const { data, error } = await supabase.storage.from(bucket).upload(path, file, {
+      upsert: true
+    });
+    if (error) throw error;
+    
+    const { data: { publicUrl } } = supabase.storage.from(bucket).getPublicUrl(path);
+    return publicUrl;
+  };
+
+  const handleSubmit = async () => {
+    setIsSubmitting(true);
+    setError(null);
+
+    try {
+      const timestamp = Date.now();
+      const userId = (await supabase.auth.getUser()).data.user?.id;
+
+      if (!userId) {
+        throw new Error('You must be signed in to submit an application.');
+      }
+
+      // 1. Upload documents
+      let idUrl = '';
+      let proofUrl = '';
+      let transcriptUrl = '';
+
+      if (applicationData.idDocument) {
+        idUrl = await uploadFile(applicationData.idDocument, 'application-documents', `${userId}/${timestamp}_id_document`);
+      }
+      if (applicationData.proofOfPayment) {
+        proofUrl = await uploadFile(applicationData.proofOfPayment, 'application-documents', `${userId}/${timestamp}_proof_of_payment`);
+      }
+      if (applicationData.transcript) {
+        transcriptUrl = await uploadFile(applicationData.transcript, 'application-documents', `${userId}/${timestamp}_transcript`);
+      }
+
+      // 2. Submit application record
+      const { error: dbError } = await supabase
+        .from('applications')
+        .insert({
+          user_id: userId,
+          program_id: applicationData.programId,
+          first_name: applicationData.firstName,
+          last_name: applicationData.lastName,
+          email: applicationData.email,
+          phone: applicationData.phone,
+          dob: applicationData.dob,
+          gender: applicationData.gender,
+          nationality: applicationData.nationality,
+          academic_level: applicationData.academicLevel,
+          field_of_study: applicationData.fieldOfStudy,
+          institution: applicationData.institution,
+          last_trimester_score: applicationData.lastTrimesterScore,
+          id_document_url: idUrl,
+          proof_of_payment_url: proofUrl,
+          transcript_url: transcriptUrl,
+          preferred_university: applicationData.preferredUniversity,
+          hoped_change: applicationData.hopedChange,
+        });
+
+      if (dbError) throw dbError;
+
+      // Success
+      setCurrentStep(TOTAL_STEPS + 1);
+    } catch (err: any) {
+      console.error('Error submitting application:', err);
+      setError(err.message || 'An unexpected error occurred. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -58,6 +127,14 @@ const Apply: React.FC = () => {
                 Complete the following steps to apply for a Bridge program.
               </p>
               <ProgressIndicator currentStep={currentStep} totalSteps={TOTAL_STEPS} />
+              
+              {error && (
+                <div className="mt-6 p-4 bg-red-50 border-l-4 border-red-500 text-red-700">
+                  <p className="font-bold">Error</p>
+                  <p>{error}</p>
+                </div>
+              )}
+
               <div className="mt-10">
                 {currentStep === 1 && <Step1Program data={applicationData} updateData={updateData} />}
                 {currentStep === 2 && <Step2PersonalDetails data={applicationData} updateData={updateData} />}
@@ -66,13 +143,15 @@ const Apply: React.FC = () => {
                 {currentStep === 5 && <Step5Review data={applicationData} />}
               </div>
               <div className="flex justify-between mt-12">
-                <Button onClick={prevStep} disabled={currentStep === 1} variant="secondary">
+                <Button onClick={prevStep} disabled={currentStep === 1 || isSubmitting} variant="secondary">
                   Back
                 </Button>
                 {currentStep < TOTAL_STEPS ? (
                   <Button onClick={nextStep}>Next</Button>
                 ) : (
-                  <Button onClick={handleSubmit}>Submit Application</Button>
+                  <Button onClick={handleSubmit} disabled={isSubmitting}>
+                    {isSubmitting ? 'Submitting...' : 'Submit Application'}
+                  </Button>
                 )}
               </div>
             </>

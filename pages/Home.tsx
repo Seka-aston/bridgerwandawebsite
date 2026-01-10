@@ -1,13 +1,49 @@
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Button from '../components/ui/Button';
 import SectionHeader from '../components/ui/SectionHeader';
 import Card from '../components/ui/Card';
-import { PROGRAMS, TESTIMONIALS } from '../constants';
 import { ArrowRight, Briefcase, Target, Users, Zap } from 'lucide-react';
+import { supabase } from '../lib/supabase';
+import { Program, Testimonial } from '../types';
+import { PROGRAMS, TESTIMONIALS } from '../constants';
 
 const Home: React.FC = () => {
+  const [programs, setPrograms] = useState<Program[]>([]);
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchContent = async () => {
+      try {
+        const [programsRes, testimonialsRes] = await Promise.all([
+          supabase.from('programs').select('*'),
+          supabase.from('testimonials').select('*')
+        ]);
+
+        if (programsRes.error) console.warn('Supabase programs fetch error:', programsRes.error.message);
+        if (testimonialsRes.error) console.warn('Supabase testimonials fetch error:', testimonialsRes.error.message);
+
+        // Use Supabase data if available, otherwise fallback to constants
+        const finalPrograms = programsRes.data && programsRes.data.length > 0 ? programsRes.data : PROGRAMS;
+        const finalTestimonials = testimonialsRes.data && testimonialsRes.data.length > 0 ? testimonialsRes.data : TESTIMONIALS;
+        
+        setPrograms(finalPrograms);
+        setTestimonials(finalTestimonials);
+      } catch (error) {
+        console.error('Error fetching content:', error);
+        // Fallback on error
+        setPrograms(PROGRAMS);
+        setTestimonials(TESTIMONIALS);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchContent();
+  }, []);
+
   const whyBridgeBenefits = [
     { icon: <Briefcase className="w-8 h-8 text-primary" />, title: "Hands-on Experience", description: "Internships aligned with TVET curriculum to build practical skills." },
     { icon: <Zap className="w-8 h-8 text-primary" />, title: "Workshops & Training", description: "Develop professional and technical skills demanded by the industry." },
@@ -21,7 +57,7 @@ const Home: React.FC = () => {
       <section className="relative bg-secondary text-white py-20 md:py-32">
         <div className="absolute inset-0">
           <img
-            src="https://unsplash.com/photos/two-female-coworkers-collaborating-showing-them-something-on-their-black-surface-laptop-QKml62yu-dA"
+            src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=1200&auto=format&fit=crop"
             alt="Students collaborating"
             className="w-full h-full object-cover opacity-30"
             loading="eager"
@@ -55,7 +91,7 @@ const Home: React.FC = () => {
                 </Link>
             </div>
             <div>
-                <img src="https://images.unsplash.com/photo-1600880292203-942bb68b2b35?q=80&w=600&h=400&auto=format&fit=crop" alt="Team meeting" className="rounded-lg shadow-xl"/>
+                <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1200&auto=format&fit=crop" alt="Team meeting" className="rounded-lg shadow-xl w-full h-auto object-cover"/>
             </div>
           </div>
         </div>
@@ -70,7 +106,9 @@ const Home: React.FC = () => {
             description="We provide a mix of internship placement, mentorship, career guidance, and entrepreneurship training to prepare you for the modern workforce."
           />
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {PROGRAMS.map((program) => (
+            {loading ? (
+              <div className="col-span-full text-center py-10 text-text-main">Loading programs...</div>
+            ) : programs.map((program) => (
               <Card key={program.id} className="flex flex-col">
                 <div className="p-6 flex-grow">
                   <h3 className="text-xl font-bold mb-2 text-text-headings">{program.title}</h3>
@@ -88,23 +126,38 @@ const Home: React.FC = () => {
       </section>
 
       {/* Why Bridge Section */}
-      <section className="py-20 bg-background">
+      <section className="py-20 bg-background overflow-hidden">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <SectionHeader
-            subtitle="Our Value"
-            title="Why Choose Bridge?"
-            description="We go beyond standard placements to provide a holistic support system for your career growth."
-          />
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 text-center">
-            {whyBridgeBenefits.map((benefit) => (
-                <div key={benefit.title} className="p-6">
-                    <div className="flex items-center justify-center h-16 w-16 rounded-full bg-surface mx-auto mb-4">
-                        {benefit.icon}
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <SectionHeader
+                subtitle="Our Value"
+                title="Why Choose Bridge?"
+                description="We go beyond standard placements to provide a holistic support system for your career growth."
+                className="text-left"
+              />
+              <div className="grid sm:grid-cols-2 gap-x-8 gap-y-10">
+                {whyBridgeBenefits.map((benefit) => (
+                    <div key={benefit.title} className="flex flex-col items-start">
+                        <div className="flex items-center justify-center h-12 w-12 rounded-full bg-surface mb-4">
+                            {benefit.icon}
+                        </div>
+                        <h3 className="text-xl font-bold mb-2 text-text-headings">{benefit.title}</h3>
+                        <p className="text-text-main">{benefit.description}</p>
                     </div>
-                    <h3 className="text-xl font-bold mb-2 text-text-headings">{benefit.title}</h3>
-                    <p className="text-text-main">{benefit.description}</p>
-                </div>
-            ))}
+                ))}
+              </div>
+            </div>
+            <div className="relative">
+              <div className="absolute -inset-4 bg-primary/10 rounded-xl transform rotate-3 hidden md:block"></div>
+              <div className="relative rounded-lg overflow-hidden shadow-2xl z-10 aspect-[4/3]">
+                <img 
+                  src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=1200&auto=format&fit=crop" 
+                  alt="Students collaborating" 
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -118,7 +171,9 @@ const Home: React.FC = () => {
             className="text-white"
           />
            <div className="max-w-4xl mx-auto">
-            {TESTIMONIALS.slice(0, 1).map(testimonial => (
+            {loading ? (
+              <div className="text-center py-10">Loading success stories...</div>
+            ) : testimonials.slice(0, 1).map(testimonial => (
               <div key={testimonial.id} className="text-center">
                 <img src={testimonial.imageUrl} alt={testimonial.name} className="w-24 h-24 rounded-full mx-auto mb-4 border-4 border-white/50" />
                 <p className="text-xl italic mb-4">"{testimonial.quote}"</p>

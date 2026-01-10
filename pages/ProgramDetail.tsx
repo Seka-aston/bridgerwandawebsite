@@ -1,14 +1,59 @@
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { PROGRAMS } from '../constants';
 import SectionHeader from '../components/ui/SectionHeader';
 import Button from '../components/ui/Button';
 import { CheckCircle, Clock, ListChecks } from 'lucide-react';
+import { supabase } from '../lib/supabase';
+import { Program } from '../types';
+import { PROGRAMS } from '../constants';
 
 const ProgramDetail: React.FC = () => {
   const { programId } = useParams<{ programId: string }>();
-  const program = PROGRAMS.find(p => p.id === programId);
+  const [program, setProgram] = useState<Program | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProgram = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('programs')
+          .select('*')
+          .eq('id', programId)
+          .single();
+        
+        if (error || !data) {
+          // If not found in Supabase, check constants
+          const localProgram = PROGRAMS.find(p => p.id === programId);
+          if (localProgram) {
+            setProgram(localProgram);
+          } else {
+            throw error || new Error('Program not found');
+          }
+        } else {
+          setProgram(data);
+        }
+      } catch (error) {
+        console.error('Error fetching program:', error);
+        // Final fallback to check constants one last time
+        const localProgram = PROGRAMS.find(p => p.id === programId);
+        if (localProgram) setProgram(localProgram);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (programId) fetchProgram();
+  }, [programId]);
+
+  if (loading) {
+    return (
+      <div className="text-center py-20">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+        <p className="mt-4 text-text-main">Loading program details...</p>
+      </div>
+    );
+  }
 
   if (!program) {
     return (
