@@ -4,7 +4,7 @@ import { useParams, Link } from 'react-router-dom';
 import { PROGRAMS } from '../constants';
 import SectionHeader from '../components/ui/SectionHeader';
 import Button from '../components/ui/Button';
-import { CheckCircle, Clock, ListChecks } from 'lucide-react';
+import { CheckCircle, Clock, ListChecks, GraduationCap, Calendar } from 'lucide-react';
 
 const ProgramDetail: React.FC = () => {
   const { programId } = useParams<{ programId: string }>();
@@ -50,6 +50,42 @@ const ProgramDetail: React.FC = () => {
                   ))}
                 </ul>
               </div>
+
+              {/* Training Tracks Section */}
+              {program.tracks && (
+                <div className="mt-16">
+                  <h3 className="text-2xl font-bold text-text-headings mb-6 flex items-center">
+                    <GraduationCap className="w-6 h-6 mr-3 text-primary" />
+                    Training Tracks Offered
+                  </h3>
+                  <div className="grid sm:grid-cols-2 gap-4">
+                    {program.tracks.map((track, index) => (
+                      <div key={index} className="bg-white p-4 rounded-xl border border-gray-100 shadow-sm flex items-center">
+                        <div className="w-2 h-2 rounded-full bg-primary mr-3"></div>
+                        <span className="text-text-main font-medium">{track}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Intake Schedule Section */}
+              {program.intakeSchedule && (
+                <div className="mt-16">
+                  <h3 className="text-2xl font-bold text-text-headings mb-6 flex items-center">
+                    <Calendar className="w-6 h-6 mr-3 text-primary" />
+                    Intake Schedule
+                  </h3>
+                  <div className="grid sm:grid-cols-2 gap-6">
+                    {program.intakeSchedule.map((schedule, index) => (
+                      <div key={index} className="bg-surface p-6 rounded-2xl border border-primary/10">
+                        <p className="text-primary font-bold text-lg mb-1">{schedule.intake}</p>
+                        <p className="text-secondary font-medium">{schedule.eligible}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
 
             <aside className="lg:col-span-1">
@@ -73,7 +109,7 @@ const ProgramDetail: React.FC = () => {
                     </div>
                   </div>
                 </div>
-                <Button to={`/apply?program=${program.id}`} className="w-full mt-8 text-lg">Register for this Program</Button>
+                <Button to={`/apply?program=${program.id}`} className="w-full mt-8 text-lg">Apply for this Program</Button>
               </div>
             </aside>
           </div>
