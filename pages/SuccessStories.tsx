@@ -6,12 +6,12 @@ import { TESTIMONIALS } from '../constants';
 
 const SuccessStories: React.FC = () => {
   const galleryImages = [
-    'https://images.unsplash.com/photo-1611214224933-7a2403b57a03?q=80&w=600&h=400&auto=format&fit=crop',
-    'https://images.unsplash.com/photo-1590402494587-44b71d7772f6?q=80&w=600&h=400&auto=format&fit=crop',
-    'https://images.unsplash.com/photo-1573496773905-f5b17e76b254?q=80&w=600&h=400&auto=format&fit=crop',
-    'https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=600&h=400&auto=format&fit=crop',
-    'https://images.unsplash.com/photo-1552581234-26160f608093?q=80&w=600&h=400&auto=format&fit=crop',
-    'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=600&h=400&auto=format&fit=crop',
+    '/images/Galleryone.jpg',
+    '/images/Gallerytwo.jpg',
+    '/images/about.jpg',
+    '/images/Gallerythree.jpeg',
+    '/images/Galleryfour.jpg',
+    '/images/Galleryfive.jpg',
   ];
 
   return (

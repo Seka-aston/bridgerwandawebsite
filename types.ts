@@ -7,6 +7,8 @@ export interface Program {
   objectives: string[];
   duration: string;
   requirements: string[];
+  tracks?: string[];
+  intakeSchedule?: { intake: string; eligible: string }[];
 }
 
 export interface Testimonial {

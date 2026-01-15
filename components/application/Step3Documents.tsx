@@ -22,7 +22,7 @@ const Step3Documents: React.FC<Props> = ({ data, updateData }) => {
           required
         />
         <FileUpload
-          label="Proof of Payment (Registration Fee: 55,000 RWF)"
+          label="Proof of Payment (Registration Fee: 50,000 RWF)"
           file={data.proofOfPayment}
           onFileChange={(file) => updateData({ proofOfPayment: file })}
           required

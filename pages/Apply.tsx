@@ -13,6 +13,8 @@ const TOTAL_STEPS = 5;
 
 const Apply: React.FC = () => {
   const [currentStep, setCurrentStep] = useState(1);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const [applicationData, setApplicationData] = useState<ApplicationData>({
     programId: '',
     firstName: '',
@@ -40,11 +42,64 @@ const Apply: React.FC = () => {
   const nextStep = () => setCurrentStep(prev => (prev < TOTAL_STEPS ? prev + 1 : prev));
   const prevStep = () => setCurrentStep(prev => (prev > 1 ? prev - 1 : prev));
   
-  const handleSubmit = () => {
-    console.log('Submitting application:', applicationData);
-    // In a real app, this would be an API call.
-    // We'll just move to a "success" state.
-    setCurrentStep(TOTAL_STEPS + 1);
+  const fileToBase64 = (file: File): Promise<{ base64: string; type: string }> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        const result = reader.result as string;
+        const base64 = result.split(',')[1];
+        resolve({ base64, type: file.type });
+      };
+      reader.onerror = error => reject(error);
+    });
+  };
+
+  const handleSubmit = async () => {
+    setIsSubmitting(true);
+    setSubmitError(null);
+
+    try {
+      // 1. Prepare data for Google Apps Script
+      const payload: any = { ...applicationData };
+      
+      // Convert files to Base64 if they exist
+      if (applicationData.idDocument) {
+        payload.idDocument = await fileToBase64(applicationData.idDocument);
+      }
+      if (applicationData.proofOfPayment) {
+        payload.proofOfPayment = await fileToBase64(applicationData.proofOfPayment);
+      }
+      if (applicationData.transcript) {
+        payload.transcript = await fileToBase64(applicationData.transcript);
+      }
+
+      // 2. Send to Google Apps Script
+      // Replace with your actual Web App URL after deployment
+      const GOOGLE_SCRIPT_URL = import.meta.env.VITE_GOOGLE_SCRIPT_URL;
+      
+      if (!GOOGLE_SCRIPT_URL) {
+        throw new Error('Google Script URL is not configured. Please set VITE_GOOGLE_SCRIPT_URL in your .env file.');
+      }
+
+      const response = await fetch(GOOGLE_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors', // Required for Google Apps Script Web Apps
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      // Note: With mode: 'no-cors', we won't be able to read the response body,
+      // but if it doesn't throw, we assume success for this specific use case.
+      setCurrentStep(TOTAL_STEPS + 1);
+    } catch (error: any) {
+      console.error('Submission error:', error);
+      setSubmitError(error.message || 'There was an error submitting your application. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -58,6 +113,14 @@ const Apply: React.FC = () => {
                 Complete the following steps to apply for a Bridge program.
               </p>
               <ProgressIndicator currentStep={currentStep} totalSteps={TOTAL_STEPS} />
+              
+              {submitError && (
+                <div className="mt-6 p-4 bg-red-50 border-l-4 border-red-500 text-red-700">
+                  <p className="font-bold">Error</p>
+                  <p>{submitError}</p>
+                </div>
+              )}
+
               <div className="mt-10">
                 {currentStep === 1 && <Step1Program data={applicationData} updateData={updateData} />}
                 {currentStep === 2 && <Step2PersonalDetails data={applicationData} updateData={updateData} />}
@@ -66,13 +129,15 @@ const Apply: React.FC = () => {
                 {currentStep === 5 && <Step5Review data={applicationData} />}
               </div>
               <div className="flex justify-between mt-12">
-                <Button onClick={prevStep} disabled={currentStep === 1} variant="secondary">
+                <Button onClick={prevStep} disabled={currentStep === 1 || isSubmitting} variant="secondary">
                   Back
                 </Button>
                 {currentStep < TOTAL_STEPS ? (
                   <Button onClick={nextStep}>Next</Button>
                 ) : (
-                  <Button onClick={handleSubmit}>Submit Application</Button>
+                  <Button onClick={handleSubmit} disabled={isSubmitting}>
+                    {isSubmitting ? 'Submitting...' : 'Submit Application'}
+                  </Button>
                 )}
               </div>
             </>

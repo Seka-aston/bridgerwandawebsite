@@ -41,7 +41,7 @@ const About: React.FC = () => {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="order-2 md:order-1">
-              <img src="https://images.unsplash.com/photo-1591115765320-9a3e3b080b13?q=80&w=600&h=450&auto=format&fit=crop" alt="Inspiration for Bridge" className="rounded-lg shadow-xl"/>
+              <img src="/images/about.jpg" alt="Inspiration for Bridge" className="rounded-lg shadow-xl"/>
             </div>
             <div className="order-1 md:order-2">
               <SectionHeader

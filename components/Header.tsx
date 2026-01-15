@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { NAV_LINKS } from '../constants';
+import { GOOGLE_FORM_URL } from '../src/config/links';
 
 const Header: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -21,7 +22,7 @@ const Header: React.FC = () => {
         <div className="flex items-center justify-between h-20">
           <div className="flex-shrink-0">
             <Link to="/">
-              <img className="h-8 w-auto" src="https://i.ibb.co/3sZt3s6/logo-green.png" alt="Bridge Logo" />
+              <img className="h-8 w-auto" src="/bridge-logo.svg" alt="Bridge Logo" />
             </Link>
           </div>
           <nav className="hidden md:flex md:space-x-8">
@@ -38,12 +39,14 @@ const Header: React.FC = () => {
             ))}
           </nav>
           <div className="hidden md:block">
-            <Link
-              to="/apply"
+            <a
+              href={GOOGLE_FORM_URL}
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-block bg-primary text-white font-semibold px-6 py-2 rounded-lg hover:bg-primary-dark transition-colors duration-300 shadow-sm"
             >
               Apply Now
-            </Link>
+            </a>
           </div>
           <div className="md:hidden">
             <button
@@ -78,13 +81,15 @@ const Header: React.FC = () => {
               </NavLink>
             ))}
              <div className="p-3">
-              <Link
-                to="/apply"
+              <a
+                href={GOOGLE_FORM_URL}
+                target="_blank"
+                rel="noopener noreferrer"
                 onClick={() => setIsOpen(false)}
                 className="w-full text-center block bg-primary text-white font-semibold px-6 py-3 rounded-lg hover:bg-primary-dark transition-colors duration-300 shadow-sm"
               >
                 Apply Now
-              </Link>
+              </a>
             </div>
           </div>
         </div>

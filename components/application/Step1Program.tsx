@@ -20,7 +20,7 @@ const Step1Program: React.FC<Props> = ({ data, updateData }) => {
           <li>Must be a Rwandan TVET student.</li>
           <li>English proficiency is required.</li>
           <li>Minimum academic score of 60% in the last trimester.</li>
-          <li>Registration fee: 55,000 RWF (Proof of payment required).</li>
+          <li>Registration fee: 50,000 RWF (Proof of payment required).</li>
         </ul>
       </div>
 

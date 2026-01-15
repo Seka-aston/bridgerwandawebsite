@@ -11,7 +11,7 @@ const Footer: React.FC = () => {
           
           {/* About Section */}
           <div>
-            <img className="h-8 w-auto mb-4" src="https://i.ibb.co/bF9k7t2/logo-white.png" alt="Bridge Logo" />
+            <img className="h-8 w-auto mb-4" src="/bridge-logo.svg" alt="Bridge Logo" />
             <p className="text-gray-400">Empowering the next generation of skilled professionals in Rwanda through training, mentorship, and career opportunities.</p>
             <div className="flex space-x-4 mt-4">
                 {/* Placeholder social icons */}
@@ -40,7 +40,7 @@ const Footer: React.FC = () => {
               <li className="flex items-center">
                 {/* Phone icon */}
                 <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
-                <span>+250 788 347 78</span>
+                <span>+250 788 434 778</span>
               </li>
               <li className="flex items-center">
                 {/* Email icon */}

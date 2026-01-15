@@ -20,7 +20,19 @@ export const PROGRAMS: Program[] = [
     longDescription: 'Our flagship program connects TVET students with leading companies for hands-on experience. We provide structured internship placements that are directly relevant to your field of study, ensuring you develop practical skills and build a professional network.',
     objectives: ['Gain practical, hands-on experience in your field.', 'Develop professional skills and workplace etiquette.', 'Build a network of industry contacts.', 'Apply academic knowledge to real-world challenges.'],
     duration: '3-6 Months',
-    requirements: ['Enrolled in a TVET program', 'Minimum 60% academic score', 'English proficiency']
+    requirements: ['Enrolled in a TVET program', 'Minimum 60% academic score', 'English proficiency'],
+    tracks: [
+      'Wood Technology',
+      'Software Development',
+      'Internet Technologies',
+      'Electrical Installation',
+      'Plumbing',
+      'Welding'
+    ],
+    intakeSchedule: [
+      { intake: 'January Intake', eligible: 'Level 5 students only' },
+      { intake: 'March Intake', eligible: 'Level 4 students only' }
+    ]
   },
   {
     id: 'career-guidance',

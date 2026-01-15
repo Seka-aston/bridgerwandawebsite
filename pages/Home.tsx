@@ -21,7 +21,7 @@ const Home: React.FC = () => {
       <section className="relative bg-secondary text-white py-20 md:py-32">
         <div className="absolute inset-0">
           <img
-            src="https://unsplash.com/photos/two-female-coworkers-collaborating-showing-them-something-on-their-black-surface-laptop-QKml62yu-dA"
+            src="/images/hero.jpg"
             alt="Students collaborating"
             className="w-full h-full object-cover opacity-30"
             loading="eager"
@@ -35,7 +35,7 @@ const Home: React.FC = () => {
             Bridge connects TVET students in Rwanda with internships, training, and career opportunities to close the gap between learning and professional readiness.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <Button to="/apply" variant="primary" className="text-lg">Register Now</Button>
+            <Button to="/apply" variant="primary" className="text-lg">Apply Now</Button>
             <Button to="/programs" variant="secondary" className="text-lg">Learn More</Button>
           </div>
         </div>
@@ -55,7 +55,7 @@ const Home: React.FC = () => {
                 </Link>
             </div>
             <div>
-                <img src="https://images.unsplash.com/photo-1600880292203-942bb68b2b35?q=80&w=600&h=400&auto=format&fit=crop" alt="Team meeting" className="rounded-lg shadow-xl"/>
+                <img src="/images/why.jpg" alt="Team meeting" className="rounded-lg shadow-xl"/>
             </div>
           </div>
         </div>
