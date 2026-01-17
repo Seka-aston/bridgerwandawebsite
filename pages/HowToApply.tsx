@@ -2,6 +2,7 @@
 import React from 'react';
 import SectionHeader from '../components/ui/SectionHeader';
 import Button from '../components/ui/Button';
+import ApplyLink from '../components/ApplyLink';
 
 const HowToApply: React.FC = () => {
   const steps = [
@@ -88,7 +89,7 @@ const HowToApply: React.FC = () => {
           <div className="text-center mt-24">
             <h3 className="text-2xl font-bold text-text-headings mb-4">Ready to Apply?</h3>
             <p className="text-text-main mb-6 max-w-2xl mx-auto">Make sure you have all your documents ready and start your application today.</p>
-            <Button to="/apply" className="text-lg">Start Your Application</Button>
+            <ApplyLink className="text-lg">Start Your Application</ApplyLink>
           </div>
           
           <div className="mt-24 p-10 bg-surface rounded-3xl text-center max-w-4xl mx-auto border border-primary/10 shadow-sm">

@@ -5,6 +5,7 @@ import { PROGRAMS } from '../constants';
 import SectionHeader from '../components/ui/SectionHeader';
 import Button from '../components/ui/Button';
 import { CheckCircle, Clock, ListChecks, GraduationCap, Calendar } from 'lucide-react';
+import ApplyLink from '../components/ApplyLink';
 
 const ProgramDetail: React.FC = () => {
   const { programId } = useParams<{ programId: string }>();
@@ -109,7 +110,7 @@ const ProgramDetail: React.FC = () => {
                     </div>
                   </div>
                 </div>
-                <Button to={`/apply?program=${program.id}`} className="w-full mt-8 text-lg">Apply for this Program</Button>
+                <ApplyLink className="w-full mt-8 text-lg">Apply for this Program</ApplyLink>
               </div>
             </aside>
           </div>

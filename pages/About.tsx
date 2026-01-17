@@ -2,6 +2,7 @@
 import React from 'react';
 import SectionHeader from '../components/ui/SectionHeader';
 import Button from '../components/ui/Button';
+import ApplyLink from '../components/ApplyLink';
 
 const About: React.FC = () => {
   return (
@@ -88,7 +89,7 @@ const About: React.FC = () => {
           <p className="text-lg text-green-100 mb-8 max-w-2xl mx-auto">
             Join Bridge today and take the first step towards a successful and fulfilling career.
           </p>
-          <Button to="/apply" variant="secondary">Apply Now</Button>
+          <ApplyLink variant="secondary">Apply Now</ApplyLink>
         </div>
       </section>
     </div>

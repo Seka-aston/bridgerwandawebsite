@@ -6,6 +6,7 @@ import SectionHeader from '../components/ui/SectionHeader';
 import Card from '../components/ui/Card';
 import { PROGRAMS, TESTIMONIALS } from '../constants';
 import { ArrowRight, Briefcase, Target, Users, Zap } from 'lucide-react';
+import ApplyLink from '../components/ApplyLink';
 
 const Home: React.FC = () => {
   const whyBridgeBenefits = [
@@ -35,7 +36,7 @@ const Home: React.FC = () => {
             Bridge connects TVET students in Rwanda with internships, training, and career opportunities to close the gap between learning and professional readiness.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <Button to="/apply" variant="primary" className="text-lg">Apply Now</Button>
+            <ApplyLink variant="primary" className="text-lg">Apply Now</ApplyLink>
             <Button to="/programs" variant="secondary" className="text-lg">Learn More</Button>
           </div>
         </div>
