@@ -35,7 +35,7 @@ const SuccessStories: React.FC = () => {
                 <img 
                   src={testimonial.imageUrl} 
                   alt={testimonial.name} 
-                  className="w-24 h-24 rounded-full mx-auto mb-4 border-4 border-gray-200"
+                  className="w-24 h-24 rounded-full mx-auto mb-4 border-4 border-gray-200 object-cover"
                 />
                 <p className="text-text-main italic flex-grow">"{testimonial.quote}"</p>
                 <div className="mt-4">

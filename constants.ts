@@ -69,21 +69,21 @@ export const TESTIMONIALS: Testimonial[] = [
         name: 'Aline U.',
         program: 'Internship Placement - Software Development',
         quote: 'Bridge gave me the practical experience I needed. The internship was perfectly aligned with my studies and helped me secure a full-time job before I even graduated.',
-        imageUrl: 'https://images.unsplash.com/photo-1593104547489-5cfb3839a3b5?q=80&w=200&h=200&auto=format&fit=crop&face=true'
+        imageUrl: '/images/tell1.jpg'
     },
     {
         id: 2,
         name: 'John K.',
         program: 'Entrepreneurship Groundbreaking',
         quote: 'The mentorship in the entrepreneurship program was invaluable. I went from having a simple idea to launching my own small business with confidence.',
-        imageUrl: 'https://images.unsplash.com/photo-1610969966932-85093557e93c?q=80&w=200&h=200&auto=format&fit=crop&face=true'
+        imageUrl: '/images/tell2.jpg'
     },
     {
         id: 3,
         name: 'Grace M.',
         program: 'Career Guidance',
         quote: 'I was unsure about my career path after my TVET course. The career guidance sessions at Bridge helped me understand my options and build a clear plan for my future.',
-        imageUrl: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=200&h=200&auto=format&fit=crop&face=true'
+        imageUrl: '/images/tell3.jpg'
     }
 ];
 

@@ -121,7 +121,7 @@ const Home: React.FC = () => {
            <div className="max-w-4xl mx-auto">
             {TESTIMONIALS.slice(0, 1).map(testimonial => (
               <div key={testimonial.id} className="text-center">
-                <img src={testimonial.imageUrl} alt={testimonial.name} className="w-24 h-24 rounded-full mx-auto mb-4 border-4 border-white/50" />
+                <img src={testimonial.imageUrl} alt={testimonial.name} className="w-24 h-24 rounded-full mx-auto mb-4 border-4 border-white/50 object-cover" />
                 <p className="text-xl italic mb-4">"{testimonial.quote}"</p>
                 <p className="font-bold text-lg">{testimonial.name}</p>
                 <p className="text-green-200">{testimonial.program}</p>
